@@ -1,4 +1,6 @@
-version: 0.1
+
+version: 0.2
+
 
 phases:
   pre_build:
@@ -6,20 +8,23 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 695868544757.dkr.ecr.eu-west-1.amazonaws.com
-      - REPOSITORY_URI=695868544757.dkr.ecr.eu-west-1.amazonaws.com/cicdlab
+      - REPOSITORY_URI=08764211481843.dkr.ecr.us-west-2.amazonaws.com/devops
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD-ID | awk -F":" '{print $2}')
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
-      - echo Build started on 'date'
+      - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t cicdlab . 
-      - docker tag cicdlab:latest1 695868544757.dkr.ecr.eu-west-1.amazonaws.com/cicdlab:latest1
+      - docker build -t cicdlab .
+      - docker tag cicdlab:latest 695868544757.dkr.ecr.eu-west-1.amazonaws.com/cicdlab:latest
   post_build:
     commands:
-      - echo Build completed on 'date'
+      - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push 695868544757.dkr.ecr.eu-west-1.amazonaws.com/cicdlab:latest1
+      - docker push 695868544757.dkr.ecr.eu-west-1.amazonaws.com/cicdlab:latest
       - echo Writing image definitions file...
-      - printf '[{"name":"app","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - cat imagedefinitions.json
+      - printf '[{"name":"devops","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
+      - cat imagedefinitions.json 
+artifacts:
+    files: 
+      - imagedefinitions.json
