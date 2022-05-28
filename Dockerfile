@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM ubuntu:latest
 RUN yum -y update
 RUN yum -y install httpd
 RUN yum -y install php
