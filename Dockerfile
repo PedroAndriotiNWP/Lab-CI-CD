@@ -1,5 +1,4 @@
-FROM linux 2:latest
-LABEL maintainer "pedro"
+FROM centos:latest
 RUN yum -y update
 RUN yum -y install httpd
 RUN yum -y install php
