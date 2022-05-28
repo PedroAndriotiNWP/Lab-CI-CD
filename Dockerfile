@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM linux 2:latest
 LABEL maintainer "pedro"
 RUN yum -y update
 RUN yum -y install httpd
