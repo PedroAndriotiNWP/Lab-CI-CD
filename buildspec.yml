@@ -1,29 +1,17 @@
-version: 0.2
-
-
-phases:
+...
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws --version
       - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/h5o5x0i9
-      - REPOSITORY_URI=public.ecr.aws/h5o5x0i9/cicdlabp
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
       - echo Build started on `date`
-      - echo Building the Docker image...
-      - docker build -t image .
+      - echo Building the Docker image...          
+      - docker build -t cicdlab:latest .
       - docker tag cicdlabp:latest public.ecr.aws/h5o5x0i9/cicdlabp:latest
   post_build:
     commands:
       - echo Build completed on `date`
-      - echo Pushing the Docker images...
+      - echo Pushing the Docker image...
       - docker push public.ecr.aws/h5o5x0i9/cicdlabp:latest
-      - echo Writing image definitions file...
-      - printf '[{"name":"devops","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
-      - cat imagedefinitions.json 
-artifacts:
-    files: 
-      - imagedefinitions.json
+...
