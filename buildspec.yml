@@ -22,7 +22,7 @@ phases:
       - echo Pushing the Docker images...
       - docker push 695868544757.dkr.ecr.eu-west-1.amazonaws.com/cicdlab:latest
       - echo Writing image definitions file...
-      - printf '[{"name":"devops","imageUri":"%s"}]' 695868544757.dkr.ecr.eu-west-1.amazonaws.com/cicdlab:latest > imagedefinitions.json
+      - printf '[{"name":"cicdlab","imageUri":"%s"}]' 695868544757.dkr.ecr.eu-west-1.amazonaws.com/cicdlab:latest > imagedefinitions.json
       - cat imagedefinitions.json 
 artifacts:
     files: 
